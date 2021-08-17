@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newsfeed/home/favorites.dart';
 
 import 'package:newsfeed/home/newsparse.dart';
-import 'package:newsfeed/model/newsmodel.dart';
+import 'package:newsfeed/model/newsdata.dart';
 import 'package:newsfeed/network/apimanager.dart';
 
 
@@ -24,9 +24,7 @@ class _NewsState extends State<News> {
 
     super.initState();
 
-            data=new APIManager().newsCall();
-
-
+        data = new APIManager().newsCall();
   }
   @override
   Widget build(BuildContext context) {
@@ -36,23 +34,26 @@ class _NewsState extends State<News> {
           decoration: BoxDecoration(
             color: Colors.white
           ),
-          child: FutureBuilder(
-              future: data,
-          builder: (BuildContext context, AsyncSnapshot<NewsParse> snapshot) {
-            print("test: ${snapshot.hasData}");
-                if(snapshot.hasData){
-                   return NewsListView(context,snapshot.data!.data);
-                }else
-                  return CircularProgressIndicator();
+          child: SafeArea(
+            child: FutureBuilder(
+                future: data,
+            builder: (BuildContext context, AsyncSnapshot<NewsParse> snapshot) {
+              print("test: ${snapshot.hasData}");
+                  if(snapshot.hasData){
+                     return NewsListView(context,snapshot.data!.data);
+                  }else
+                    return CircularProgressIndicator();
 
-            },
+              },
+            ),
           ),
         ),
       )
     );
   }
 
-  Widget NewsListView(BuildContext context, List<dynamic> data) {
+  Widget NewsListView(BuildContext context, List<Datum> data) {
+    DataHold.newsList=data;
     return ListView.builder(
       itemCount: data.length,
       padding: EdgeInsets.all(8.0),
@@ -85,7 +86,7 @@ class _NewsState extends State<News> {
                   }else {
                     savedNews.add(selectedNews);
                   }
-
+                  DataHold().alist=savedNews;
                 });
 
 

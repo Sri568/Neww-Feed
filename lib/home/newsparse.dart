@@ -2,7 +2,6 @@
 //
 //     final newsParse = newsParseFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 NewsParse newsParseFromJson(String str) => NewsParse.fromJson(json.decode(str));

@@ -2,12 +2,12 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newsfeed/compnents/alreadyhaveanactcheck.dart';
 import 'package:newsfeed/compnents/forgot_password.dart';
 import 'package:newsfeed/compnents/rounded_input_field.dart';
 import 'package:newsfeed/compnents/rounded_password_field.dart';
 import 'package:newsfeed/home/home.dart';
 import 'package:newsfeed/signin/signinparse.dart';
+import 'package:newsfeed/signup.dart';
 
 
 import '../compnents/signin_divider_text.dart';
@@ -77,7 +77,10 @@ class _SignInState extends State<SignIn> {
                           RoundedPasswordField(onChanged: (value) => password=value),
                           ForgotPassword(),
                           ElevatedButton(
-                            onPressed: () => _signInCall(context),
+                            onPressed: (){
+                              showLoaderDialog(context);
+                              _signInCall(context);
+                            },
                             child: Text(
                               "Login",
                               style: TextStyle(color: Colors.white),
@@ -106,7 +109,18 @@ class _SignInState extends State<SignIn> {
                     ],
                   ),
                 ),
-                    AlreadyHaveAnAccountCheck(login: true, press: (){})
+                 Row(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: [
+                     Text('Already have an account'),
+                     GestureDetector(
+                       onTap: (){
+                          callSignUp(context);
+                       },
+                       child: Text('SignUp',style: TextStyle(color: Colors.deepOrange),),
+                     )
+                   ],
+                 )
                   ],
                 ),
               ),
@@ -117,7 +131,7 @@ class _SignInState extends State<SignIn> {
 
   _signInCall(BuildContext context) async {
 
-    var response = await new APIManager().signInNetworkCall("test@gmail.com", "test");
+    var response = await new APIManager().signInNetworkCall(userName,password);
     var decoded;
 
     try {
@@ -159,6 +173,27 @@ class _SignInState extends State<SignIn> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     });
+  }
+
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
+
+  callSignUp(BuildContext context) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => SignUp()));
   }
 }
 
