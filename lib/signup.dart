@@ -2,9 +2,8 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:newsfeed/compnents/alreadyhaveanactcheck.dart';
 import 'package:newsfeed/compnents/forgot_password.dart';
-import 'package:newsfeed/compnents/rounded_button.dart';
+
 import 'package:newsfeed/compnents/rounded_input_field.dart';
 import 'package:newsfeed/compnents/rounded_password_field.dart';
 import 'package:newsfeed/signin/signin.dart';
